@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import Welcome from "./components/Welcome";
 import Action from "./components/Action";
 import Card from "./components/Card";
@@ -11,7 +11,7 @@ import { nanoid } from "nanoid";
 import Transactions from "./components/Transactions";
 
 function App() {
-  const [data, setData] = useState({
+  const [data, setData] = useState( JSON.parse(localStorage.getItem("expenseData")) ||{
     name: "React",
     Balance: 10000,
     Budget: 1000,
@@ -33,19 +33,23 @@ function App() {
       {
         id: nanoid(),
         time: new Date(),
-        Description: "chocolate",
+        Description: "Gift",
         tag: "income",
         amount: 220,
       },
       {
         id: nanoid(),
         time: new Date(),
-        Description: "rose",
+        Description: "salary",
         tag: "income",
         amount: 300,
       },
     ],
   });
+
+  useEffect(() => {
+    localStorage.setItem("expenseData", JSON.stringify(data));
+  }, [data]);
 
   const income = data.transactions
     .filter((transaction) => transaction.tag === "income")
@@ -53,8 +57,7 @@ function App() {
   const expense = data.transactions
     .filter((transaction) => transaction.tag === "expense")
     .reduce((acc, transaction) => acc + Number(transaction.amount), 0);
-
-  console.log(data);
+  
   return (
     <main className="app h-full p-4 ">
       <Welcome name={data.name} />
@@ -93,7 +96,7 @@ function App() {
           <div className="w-full border-[1px] border-purple-200 rounded-full bg-purple-200"></div>
         </div>
         {data.transactions.map((transaction) => {
-          return <Transactions key={transaction.id} data={transaction} setData={setData} />;
+          return <Transactions key={transaction.id} data={data} transaction={transaction} setData={setData} />;
         })}
       </div>
     </main>

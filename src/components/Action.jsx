@@ -47,7 +47,7 @@ const Action = ({ data, setData }) => {
                         time: new Date(),
                         Description: input.description,
                         tag: input.tag,
-                        amount: input.amount,
+                        amount: Number(input.amount),
                     },
                     ...data.transactions,
                 ],
@@ -66,7 +66,7 @@ const Action = ({ data, setData }) => {
             return {
                 name: data.name,
                 Balance: data.Balance,
-                Budget: input.amount,
+                Budget: Number(input.amount),
                 transactions: [
                     ...data.transactions,
                 ],
@@ -126,7 +126,7 @@ const Action = ({ data, setData }) => {
             {/* Dialog Box for transaction*/}
             <dialog open={updateDialog} className="fixed z-20 left-0 top-0 h-full w-full backdrop-blur-[2px] bg-[#00000033] " >
                 <div className='flex h-full items-center justify-center'>
-                    <div className="todo-input relative sm:w-full max-w-2xl m-0 mx-auto p-5 bg-white z-10 rounded-lg">
+                    <div className="relative sm:w-full max-w-2xl m-0 mx-auto p-5 bg-white z-10 rounded-lg">
                         <p className={`w-full text-center text-xl font-medium ${input.tag === "expense" ? "text-[#ec4726]" : "text-[#26dd6c]"}`}>{input.tag === "expense" ? "Add Expense" : "Top up"}</p>
                         {/* amount input */}
                         <input
@@ -173,7 +173,7 @@ const Action = ({ data, setData }) => {
             {/* Dialog for Budget */}
             <dialog open={budgetDialog} className="fixed z-20 left-0 top-0 h-full w-full backdrop-blur-[2px] bg-[#00000033] " >
                 <div className='flex h-full items-center justify-center'>
-                    <div className="todo-input relative sm:w-full max-w-2xl m-0 mx-auto p-5 bg-white z-10 rounded-lg">
+                    <div className="relative sm:w-full max-w-2xl m-0 mx-auto p-5 bg-white z-10 rounded-lg">
                         <p className="w-full text-center text-xl font-medium text- ">Set Budget</p>
                         {/* amount input */}
                         <input

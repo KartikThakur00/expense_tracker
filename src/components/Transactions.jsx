@@ -2,15 +2,29 @@ import { useState } from 'react'
 import crossSvg from '../assets/cross.svg'
 import tickSvg from '../assets/tick.svg'
 
-const Transactions = ({ data, setData }) => {
+const Transactions = ({data, transaction, setData }) => {
+
   const [updateDialog, setUpdateDialog] = useState(false)
+  
+  let time=new Date(transaction.time)
+
+  const month = time.getMonth() + 1 < 10 ? `0${time.getMonth() + 1}` : time.getMonth() + 1
+  const year = time.getFullYear()
+  const date = time.getDate()
+  const hours = time.getHours() < 10 ? `0${time.getHours()}` : time.getHours()
+  const minutes = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes()
+
+  const formatter = new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+  })
 
   const [input, setInput] = useState({
-    id: data.id,
-    time: data.time,
-    description: data.Description,
-    tag: data.tag,
-    amount: data.amount
+    id: transaction.id,
+    time: transaction.time,
+    description: transaction.Description,
+    tag: transaction.tag,
+    amount: transaction.amount
   })
 
   const handleInputChange = (e) => {
@@ -22,48 +36,95 @@ const Transactions = ({ data, setData }) => {
   }
 
   const handleTransactionEdit = () => {
+    let cbalance;
+    if (input.tag === 'expense') {
+      if (transaction.amount > input.amount) {
+        cbalance = data.Balance + (transaction.amount - Number(input.amount))
+      } else {
+        console.log(typeof data.Balance, typeof Number(input.amount), typeof Number(transaction.amount))
+        cbalance = data.Balance - (Number(input.amount) - transaction.amount)
+        cbalance = cbalance < 0 ? 0 : cbalance
+      }
+    } else {
+      if (transaction.amount > Number(input.amount)) {
+        cbalance = data.Balance - (transaction.amount - Number(input.amount))
+        cbalance = cbalance < 0 ? 0 : cbalance
+      } else {
+        cbalance = data.Balance + (Number(input.amount) - transaction.amount)
+      }
+    }
+    setData(transaction => {
+      return {
+        name: transaction.name,
+        Balance: cbalance,
+        Budget: transaction.Budget,
+        transactions: data.transactions.map((transaction) => {
+          if (transaction.id === input.id) {
+            return {
+              id: input.id,
+              time: input.time,
+              Description: input.description,
+              tag: input.tag,
+              amount: Number(input.amount),
+            }
+          }
+          return transaction
+        }),
+      }
+    })
 
   }
 
+  const handleDelete = (id) => {
+    let cbalance;
+    if (transaction.tag === 'expense') {
+      console.log(typeof data.Balance, typeof transaction.amount)
+      cbalance = data.Balance + transaction.amount
+    } else {
+      cbalance = data.Balance - transaction.amount
+      cbalance = cbalance < 0 ? 0 : cbalance
+    }
+    console.log(transaction.transactions)
+    setData(transaction => {
+      return {
+        name: transaction.name,
+        Balance: cbalance,
+        Budget: transaction.Budget,
+        transactions: data.transactions.filter((transaction) => transaction.id !==id),
+      }
+    })
 
-  const month = data.time.getMonth() + 1 < 10 ? `0${data.time.getMonth() + 1}` : data.time.getMonth() + 1
-  const year = data.time.getFullYear()
-  const date = data.time.getDate()
-  const hours = data.time.getHours() < 10 ? `0${data.time.getHours()}` : data.time.getHours()
-  const minutes = data.time.getMinutes() < 10 ? `0${data.time.getMinutes()}` : data.time.getMinutes()
 
-  const formatter = new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-  })
+  }
 
-  console.log(input)
   return (
-    <div
-      className={`w-full flex items-center justify-between mt-2 p-2 sm:px-4 border-2 rounded-md cursor-pointer ${data.tag === "expense" ? "bg-red-100 border-red-200" : "bg-green-100 border-green-200"}`}
-      onClick={() => setUpdateDialog(!updateDialog)}
-    >
-      <div>
-        <p className='text-base font-medium '>
-          {data.Description}
+    <div>
+
+      <div
+        className={`w-full flex items-center justify-between mt-2 p-2 sm:px-4 border-2 rounded-md cursor-pointer ${transaction.tag === "expense" ? "bg-red-100 border-red-200" : "bg-green-100 border-green-200"}`}
+        onClick={() => setUpdateDialog(!updateDialog)}
+      >
+        <div>
+          <p className='text-base font-medium '>
+            {transaction.Description}
+          </p>
+          <p className='text-xs text-gray-400'>
+            {`${date}/${month}/${year} ${hours}:${minutes}`}
+          </p>
+        </div>
+        <p className={`${transaction.tag === "expense" ? "text-red-500" : "text-green-500"} font-medium`}>
+          {transaction.tag}
         </p>
-        <p className='text-xs text-gray-400'>
-          {`${date}/${month}/${year} ${hours}:${minutes}`}
+
+        <p className={`${transaction.tag === "expense" ? "text-red-500" : "text-green-500"} font-medium sm:text-base`}>
+          {formatter.format(transaction.amount)}
         </p>
       </div>
-      <p className={`${data.tag === "expense" ? "text-red-500" : "text-green-500"} font-medium`}>
-        {data.tag}
-      </p>
-
-      <p className={`${data.tag === "expense" ? "text-red-500" : "text-green-500"} font-medium sm:text-base`}>
-        {formatter.format(data.amount)}
-      </p>
-
-      {/* edit dialog */}
-      <dialog open={updateDialog} className="fixed z-20 left-0 top-0 h-full w-full backdrop-blur-[2px] bg-[#00000033] " >
+      < dialog open={updateDialog} className="fixed z-20 left-0 top-0 h-full w-full backdrop-blur-[2px] bg-[#00000033] " >
         <div className='flex h-full items-center justify-center'>
           <div className="todo-input relative sm:w-full max-w-2xl m-0 mx-auto p-5 bg-white z-10 rounded-lg">
-            <p className="w-full text-center text-xl font-medium ">Edit Transaction</p>
+            <p className={`w-full text-center text-xl font-medium ${input.tag === "expense" ? "text-[#ec4726]" : "text-[#26dd6c]"} `}>Edit Transaction</p>
+
             {/* title input */}
             <input
               name="amount"
@@ -72,13 +133,15 @@ const Transactions = ({ data, setData }) => {
               placeholder="10,000 "
               onChange={handleInputChange}
               value={input.amount}
-              className="w-full block border-0 outline-none m-0 p-0 px-3 pt-5 bg-transparent font-semibold text-lg mb-2.5"
+              className="w-full border-0 outline-none m-0 p-0 px-3 pt-5 bg-transparent flex-1 font-semibold text-lg mb-1"
             />
+
+
 
             {/* input note */}
             <textarea
               name="description"
-              placeholder={data.Description}
+              placeholder={transaction.Description}
               spellCheck="false"
               onChange={handleInputChange}
               value={input.description}
@@ -95,6 +158,10 @@ const Transactions = ({ data, setData }) => {
 
             {/* save button */}
             <button
+              onClick={() => { handleDelete(transaction.id); setUpdateDialog(!updateDialog) }}
+              className="flex items-center justify-center absolute left-7 -bottom-4 bg-red-400 text-white border-none rounded-full text-base px-4 py-2 text-center cursor-pointer transition"
+            >Delete</button>
+            <button
               disabled={!(input.description || input.amount)}
               style={!(input.description || input.amount) ? { display: 'none' } : { display: 'block' }}
               onClick={() => { handleTransactionEdit(); setUpdateDialog(!updateDialog) }}
@@ -104,7 +171,7 @@ const Transactions = ({ data, setData }) => {
             </button>
           </div>
         </div>
-      </dialog>
+      </dialog >
     </div>
   )
 }
