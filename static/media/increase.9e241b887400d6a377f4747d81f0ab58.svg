@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" fill="#26dd6c" width="800px" height="800px"
+    viewBox="0 0 24 24" id="up-arrow" data-name="Flat Line" class="icon flat-line">
+    <line id="primary" x1="12" y1="21" x2="12" y2="3"
+        style="fill: #26dd6c; stroke: #26dd6c; stroke-linecap: round; stroke-linejoin: round; stroke-width: 3;" />
+    <polyline id="primary-2" data-name="primary" points="15 6 12 3 9 6"
+        style="fill: #26dd6c; stroke: #26dd6c; stroke-linecap: round; stroke-linejoin: round; stroke-width: 3;" />
+</svg>

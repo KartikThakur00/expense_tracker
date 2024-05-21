@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/expense_tracker/static/css/main.22e85e8c.css",
+    "main.js": "/expense_tracker/static/js/main.0948ed90.js",
+    "static/js/453.50385a13.chunk.js": "/expense_tracker/static/js/453.50385a13.chunk.js",
+    "static/media/wallet-1.svg": "/expense_tracker/static/media/wallet-1.273e96a931ecdc0c17aaff712042a011.svg",
+    "static/media/bank.svg": "/expense_tracker/static/media/bank.cdb50163aa615df96548a6f8fb20ff6c.svg",
+    "static/media/wallet.svg": "/expense_tracker/static/media/wallet.ddeee70367cf1da89ed2ba3b921d075e.svg",
+    "index.html": "/expense_tracker/index.html",
+    "static/media/add.svg": "/expense_tracker/static/media/add.70e1f374c2d5e5f736df6de3436eec1b.svg",
+    "static/media/decrease.svg": "/expense_tracker/static/media/decrease.3a2954c2b45fc2a8d251ee026e33496e.svg",
+    "static/media/target.svg": "/expense_tracker/static/media/target.9bdc970bc51c2c1b3875f2018bba3e41.svg",
+    "static/media/increase.svg": "/expense_tracker/static/media/increase.9e241b887400d6a377f4747d81f0ab58.svg",
+    "static/media/subtract.svg": "/expense_tracker/static/media/subtract.ce71e07d04f9838ecc23035b143aa704.svg",
+    "static/media/cross.svg": "/expense_tracker/static/media/cross.6c0306ef9f0aa4bf9abcb8bff486d59c.svg",
+    "static/media/tick.svg": "/expense_tracker/static/media/tick.6bad5717b7e4c4193361fe8985e860a8.svg",
+    "main.22e85e8c.css.map": "/expense_tracker/static/css/main.22e85e8c.css.map",
+    "main.0948ed90.js.map": "/expense_tracker/static/js/main.0948ed90.js.map",
+    "453.50385a13.chunk.js.map": "/expense_tracker/static/js/453.50385a13.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.22e85e8c.css",
+    "static/js/main.0948ed90.js"
+  ]
+}
